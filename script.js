@@ -1,5 +1,4 @@
 const barsContainer = document.querySelector('.container')
-const mergeBtn = document.getElementById('merge')
 const bubbleBtn = document.getElementById('bubble')
 const quickBtn = document.getElementById('quick')
 const makeArrayBtn = document.getElementById('new-array')
@@ -173,6 +172,53 @@ async function insertionSort(arr = randomArray){
 
 }
 
+async function merge(arr1, arr2){
+let sorted = []
+let x = 0
+let y = 0
+    while(x < arr1.length && y < arr2.length){
+        if (arr1[x].n < arr2[y].n){    
+            sorted.push(arr1[x])
+            x++
+        } else {
+            sorted.push(arr2[y])
+            y++
+        }
+    }
+    while (x < arr1.length){
+        sorted.push(arr1[x])
+        x++
+    }
+    while (y < arr2.length){
+        sorted.push(arr2[y])
+        y++
+    }
+    const sortedIndexes = sorted.map(n => n.index).sort((a,b) => {return a - b})
+    for (let i=0; i < sortedIndexes.length; i++){
+        let element = document.getElementById(`${sortedIndexes[i]}`)
+        console.log(element)
+        setTimeout(() => {
+            element.style.background = 'red'
+        }, (i + 1) * 10)
+        await sleep(10)
+        element.setAttribute('style', `height:${sorted[i].n}px`)
+        setTimeout(() => {
+            element.style.background = 'cornflowerblue'
+        }, (i + 1) * 20)
+        await sleep(10)
+    }
+    return sorted
+}
+
+objArr = randomArray.map((n, index) => {return {n, index}})
+
+async function mergeSort(arr = objArr){
+    if (arr.length <= 1){return arr}
+    let mid = Math.floor(arr.length / 2)
+    let left = await mergeSort(arr.slice(0,mid))
+    let right = await mergeSort(arr.slice(mid))
+    return await merge(left, right)
+}
 
 function changeArray(){
     randomArray = generateArray(100, 600)
