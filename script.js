@@ -4,7 +4,7 @@ const quickBtn = document.getElementById('quick')
 const makeArrayBtn = document.getElementById('new-array')
 const insertionBtn = document.getElementById('insertion')
 let generateArray = (length, max) => [...new Array(length)]
-    .map(() => Math.round(Math.random() * max));
+    .map(() => Math.round(Math.random() * max) + 5);
 let randomArray = generateArray(100, 600)
 
 function createBars(){
@@ -196,21 +196,28 @@ let y = 0
     const sortedIndexes = sorted.map(n => n.index).sort((a,b) => {return a - b})
     for (let i=0; i < sortedIndexes.length; i++){
         let element = document.getElementById(`${sortedIndexes[i]}`)
-        console.log(element)
         setTimeout(() => {
             element.style.background = 'red'
-        }, (i + 1) * 10)
+        }, (i + 1) * 1)
         await sleep(10)
         element.setAttribute('style', `height:${sorted[i].n}px`)
         setTimeout(() => {
             element.style.background = 'cornflowerblue'
-        }, (i + 1) * 20)
+        }, (i + 1) * 2)
         await sleep(10)
+    }
+    if (sorted.length === objArr.length){
+        sorted.forEach((el, index) => {
+            const bar = document.getElementById(`${index}`)
+            setTimeout(() => {
+                bar.style.backgroundColor = 'rgb(113, 20, 206)'
+            }, index * 10)
+        })
     }
     return sorted
 }
 
-objArr = randomArray.map((n, index) => {return {n, index}})
+let objArr = randomArray.map((n, index) => {return {n, index}})
 
 async function mergeSort(arr = objArr){
     if (arr.length <= 1){return arr}
@@ -219,6 +226,68 @@ async function mergeSort(arr = objArr){
     let right = await mergeSort(arr.slice(mid))
     return await merge(left, right)
 }
+
+
+async function maxHeap(arr, index,length){
+    const left = index *2
+    const right = index * 2 + 1
+    let max = index
+    if (right < length){
+        if (arr[left] >= arr[right]){
+            max = left
+        }
+        else {
+            max = right
+        }
+    }
+    else if (left < length){
+        max = left
+    }
+
+    else return
+
+    if (arr[index] < arr[max]){
+         await swap(arr, index, max)
+         await maxHeap(arr, max, length)
+    }
+
+    return
+}
+
+async function swap(arr, index, max){
+    let indexEl = document.getElementById(`${index}`)
+    let maxEl = document.getElementById(`${max}`)
+    changecolors(indexEl, maxEl, 'red', index * 1)
+    await sleep(10)
+    indexEl.setAttribute('style', `height:${arr[max]}px`)
+    maxEl.setAttribute('style', `height:${arr[index]}px`)
+    changecolors(indexEl, maxEl, 'cornflowerblue', index * 2)
+    await sleep(10)
+    let temp = arr[index]
+    arr[index] = arr[max]
+    arr[max] = temp
+}
+
+
+async function heapSort(arr = randomArray){
+    let n = arr.length
+    for(let i = Math.floor(n/2)-1; i >= 0;i--){
+        await maxHeap(arr, i, n)
+    }
+    for (let i = n - 1; i >= 0; i--){
+        await swap(arr, 0, i)
+        await maxHeap(arr, 0, i)
+    }
+    arr.forEach((el, index) => {
+        const bar = document.getElementById(`${index}`)
+        setTimeout(() => {
+            bar.style.backgroundColor = 'rgb(113, 20, 206)'
+        }, index * 10)
+    })
+
+    return arr
+}
+
 
 function changeArray(){
     randomArray = generateArray(100, 600)

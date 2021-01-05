@@ -11,10 +11,12 @@ nav {
 }
 
 .container {
-   display: flex;
+    display: flex;
     justify-content: center;
     align-items: flex-end;
-    width: 100vw;  
+    width: 100vw;
+    position: absolute;
+    bottom: 5px;
 }
 
 main {
@@ -34,3 +36,33 @@ main {
     background-color: rgb(113, 20, 206);
     transition: background-color 0.5s ease-in;
 }
+nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    background-color: rgb(107, 107, 230);
+    color: white; 
+}
+
+.btn {
+    border: none;
+    background: none;
+    color: white;
+    font-size: 16px;
+}
+
+.btn:hover {
+    cursor: pointer;
+    color: rgb(113, 20, 206);
+}
+
+.btn:focus {
+    outline: 0;
+}
+
+.btn:active {
+    color: rgb(116, 190, 5)
+}
+
